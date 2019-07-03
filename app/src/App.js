@@ -1,13 +1,12 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 import ASINProductData from './componets/ASINProducts/ASINProductsData';
+import Header from './componets/ASINProducts/Header'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Amazon ASIN Product Data Scraper</h1>
-      </header>
+      <Header />
       <ASINProductData />
     </div>
   );

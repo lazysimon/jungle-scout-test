@@ -1,25 +1,46 @@
 .App {
   text-align: center;
   padding: 16px;
+}
+
+body {
   background: #F6F7F9;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.header-container {
+  background: #ffffff;
+  border: #ECEDEF 1px solid;
+  padding: 10px;
 }
 
+.product-table-container {
+  padding-top: 16px;
+}
 
 .asin-input-container {
+  background: #ffffff;
+  border: #ECEDEF 1px solid;
+
+  h4 {
+    display: inline-block;
+    margin: 0;
+    padding-right: 15px;
+  }
+
+  .ui.form {
+    padding: 15px 15px 0 15px;
+  }
+
   .asin-input {
     display: inline-block;
     padding-right: 10px;
+    margin: 0 auto;
   }
   
   .ui.button.asin-submit-btn {
     background: #F57706;
     color: #ffffff;
+    margin: 0 auto;
   }
 }
 

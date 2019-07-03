@@ -23,8 +23,9 @@ export default class ProductTable extends Component {
   }
 
   render() {
+    console.log(this.props.asin)
     return (
-      <Container>
+      <Container className='product-table-container'>
         <Table celled padded>
           <Table.Header>
             <Table.Row>
