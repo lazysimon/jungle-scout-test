@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Form, Button, Container } from 'semantic-ui-react'
 
 export default class ASINInput extends Component {
   constructor(props) {
@@ -14,11 +15,18 @@ export default class ASINInput extends Component {
 
   }
 
+  onSubmitInput(e) {
+    this.props.input()
+  }
+
   render() {
     return (
-      <div>
-
-      </div>
+      <Container className='asin-input-container'>
+        <Form>
+        <Form.Input className='asin-input' placeholder='ASIN' />
+          <Button className='asin-submit-btn' type='submit'>Submit</Button>
+        </Form>
+      </Container>
     )
   }
 }
