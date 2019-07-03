@@ -2,11 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const productRoutes = require('./routes/product.route');
-
 const app = express();
 const PORT = 8080;
-const routes = express.Router()
+const productRoutes = require('./routes/product.route');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -20,9 +18,10 @@ connection.once('open', function() {
 
 // routes
 app.get('/ping', (req, res) => res.send('pong'));
-app.use('/product', productRoutes)
+app.use('/api', productRoutes)
 
 app.listen(PORT, function() {
     console.log("Server is running on Port: " + PORT);
 });
+
 
