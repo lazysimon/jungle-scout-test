@@ -2,18 +2,22 @@ const Product = require('../models/product.model');
 const AmazonScraper = require('../services/amazonSraper');
 
 async function scrapeAndSave(req, res, next) {
-  console.log('scraping...', req.body)
   const asin = req.body.asin
   const scrapedData = await AmazonScraper(asin) 
-  console.log('scraped product', scrapedData)
-  
-  let product = new Product(scrapedData);
-  product.save()
-    .then((business) => {
-      res.status(200).json({'product': 'product successfully added'})
+    .then((data) => {
+      let product = new Product(scrapedData);
+      product.save()
+        .then((product) => {
+          res.status(200).json({'product': 'product successfully added'})
+        })
+        .catch((err) => {
+          res.status(400).send('unable to save to database')
+        })
     })
-    .catch((err) => {
-      res.status(400).send("unable to save to database")
+    .catch((error) => {
+      // res.status(400).send('page not found')
+      res.status(400).json({error: 'page not found'})
+      
     })
 }
 
@@ -38,4 +42,4 @@ async function addProduct(req, res) {
     })
 }
 
-module.exports = {addProduct, getAllProducts, scrapeAndSave}
+module.exports = { addProduct, getAllProducts, scrapeAndSave }
