@@ -1,18 +1,21 @@
 import React, { Component } from 'react'
-import ProductTable from './ProductTable';
-import ASINInput from './ASINInput';
+import ProductTable from './ProductTable'
+import ASINInput from './ASINInput'
 import axios from 'axios'
+import reverse from 'lodash/reverse'
+import ErrorMessage from './ErrorMessage'
 
 export default class ASINProductData extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      isLoading: false,
-      products: []
+      products: [],
+      errorMessage: ''
     }
 
     this.getProductData = this.getProductData.bind(this)
+    this.scrapeAndSave = this.scrapeAndSave.bind(this)
   }
 
   async componentDidMount() {
@@ -22,7 +25,8 @@ export default class ASINProductData extends Component {
   async getProductData() {
     axios.get('http://localhost:8080/api/product/')
       .then((products) => {
-        this.setState({products: products.data})
+        const data = reverse(products.data)
+        this.setState({products: data})
       })
       .catch((error) => {
         console.log(error)
@@ -30,24 +34,27 @@ export default class ASINProductData extends Component {
   }
 
   async scrapeAndSave(asin) {
-    console.log('scrape and save', asin)
     return axios.post('http://localhost:8080/api/product/scrape/add', 
       {
         asin: asin
-      }).then((res) => {
+      }).then((res) => { 
         this.getProductData()
       })
       .catch((error) => {
-        console.log(error)
+        this.setState({ errorMessage: 'We\'re sorry, we couldn\'t find that product. Please try another ASIN.' })
       })
   }
 
 
   render() {
-    const { products } = this.state
+    const { products, errorMessage } = this.state
+    console.log(errorMessage)
     return (
       <div>
         <ASINInput scrapeAndSave={(asin) => this.scrapeAndSave(asin)}/>
+        {
+          errorMessage && <ErrorMessage message={errorMessage}/>
+        }
         <ProductTable products={products}/>
       </div>
     )

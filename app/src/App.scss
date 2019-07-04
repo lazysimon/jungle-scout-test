@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  padding: 16px;
+  padding: 0 16px 16px 16px;
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -8,10 +8,19 @@ body {
   background: #F6F7F9;
 }
 
+.jungle-scout-logo {
+  width: 30%;
+  margin: 0 auto;
+  padding: 16px;
+}
 .header-container {
   background: #ffffff;
   border: #ECEDEF 1px solid;
   padding: 10px;
+}
+
+.error-message-container {
+  padding-top: 16px;
 }
 
 .product-table-container {

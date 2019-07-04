@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import { Container, Table, Message } from 'semantic-ui-react'
 import ProductRow from './ProductRow'
 import isEmpty from 'lodash/isEmpty';
@@ -17,22 +16,6 @@ export default class ProductTable extends Component {
     this.renderEmpty = this.renderEmpty.bind(this);
     this.renderProductsLogic = this.renderProductsLogic.bind(this);
   }
-
-  async componentDidMount() {
-    console.log('mount product')
-    // await this.getProductData()
-  }
-
-  // async getProductData() {
-  //   axios.get('http://localhost:8080/api/product/')
-  //     .then((products) => {
-  //       this.setState({products: products.data})
-  //     })
-  //     .catch((error) => {
-  //       console.log(error)
-  //     })
-    
-  // }
 
   renderEmpty() {
     return (
@@ -56,6 +39,7 @@ export default class ProductTable extends Component {
             <Table.HeaderCell>Category</Table.HeaderCell>
             <Table.HeaderCell>Rank</Table.HeaderCell>
             <Table.HeaderCell>Product Dimensions</Table.HeaderCell>
+            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
