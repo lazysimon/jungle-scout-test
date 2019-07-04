@@ -22,8 +22,8 @@ const getRank = ($) => {
     }
   }
 
-  if (rank && rank.includes('Amazon Best Sellers Rank ')) {
-      rank = rank.replace(/Amazon Best Sellers Rank/g,'');
+  if (rank && rank.includes('Amazon Best Sellers Rank: ')) {
+      rank = rank.replace(/Amazon Best Sellers Rank:/g,'');
   }
 
   return rank;
@@ -61,6 +61,11 @@ const getProductDimensions = ($) => {
 const processHtml = (html, asin) =>{
   const $ = cheerio.load(html);
 
+  // check if page exists:
+  const pageNotFound = $('#g > div > a > img').attr("alt");
+  if (pageNotFound) {
+    throw new Error('page not found')
+  }
   // --- PRODUCT DIMENSIONS
   const productDimensions = getProductDimensions($)
 
