@@ -2,22 +2,25 @@ const cheerio = require('cheerio');
 const url = 'https://www.amazon.com/dp/B002QYW8LW';
 const url1 = 'https://www.amazon.com/dp/B00MNV8E0C';
 const url2 = 'https://www.amazon.com/dp/B003AIM52A';
+// B07JZQFHX6
 const { Builder } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const Product = require('../models/product.model.js')
 
 let product;
 
-const processHtml = (html) =>{
+const processHtml = (html, asin) =>{
   const $ = cheerio.load(html);
 
   const productDimensionsSelectorType1 =  '#prodDetails > div.wrapper.USlocale > div.column.col1 > div > div.content.pdClearfix > div > div > table > tbody > tr:nth-child(2) > td.value';
   const productDimensionsSelectorType2 = '#detail-bullets > table > tbody > tr > td > div.content > ul > li:nth-child(1)'
   const productDimensionsSelectorType3 = '#productDetails_detailBullets_sections1 > tbody > tr:nth-child(1) > td'
+  const productDimensionsSelectorType4 = '#productDetailsTable > tbody > tr > td > div.content > ul > li:nth-child(1)'
 
   let productDimensions = $(productDimensionsSelectorType1).text().replace(/\s+/g, " ").trim() 
     || $(productDimensionsSelectorType2).text().replace(/\s+/g, " ").trim() 
     || $(productDimensionsSelectorType3).text().replace(/\s+/g, " ").trim()
+    || $(productDimensionsSelectorType4).text().replace(/\s+/g, " ").trim()
 
   if(productDimensions.includes('Product Dimensions: ')) {
     productDimensions = productDimensions.replace(/Product Dimensions: /g,'');
@@ -38,6 +41,7 @@ const processHtml = (html) =>{
   const category = $(categorySelector).text().replace(/\s+/g, " ").trim()
 
   const productObject = {
+    asin,
     productDimensions,
     rank,
     category
@@ -55,10 +59,10 @@ async function AmazonScraper(asin) {
       .windowSize({width:1000, height:8000}))
       .build()
   
-    await driver.get(url2);
+    await driver.get(url);
     await driver.getPageSource()
       .then((html) => {
-        processHtml(html)
+        processHtml(html, asin)
         driver.quit()
       }).catch((error) =>  {
         console.log(error)

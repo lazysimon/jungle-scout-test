@@ -8,9 +8,19 @@ router.post('/product/add', (req, res) => {
   res.send('here')
 })
 
-router.get('/product/scrape', (req, res) => {
+router.get('/product/scrape/', (req, res) => {
   console.log('scrape')
-  productController.scrape(req, res)
+  productController.scrapeAndSave(req, res)
+})
+
+router.post('/product/scrape/add', (req, res) => {
+  console.log('scrape')
+  productController.scrapeAndSave(req, res)
+})
+
+router.get('/product/', (req, res) => {
+  console.log('get')
+  productController.getAllProducts(req, res)
 })
 
 module.exports = router
