@@ -5,40 +5,70 @@ const url2 = 'https://www.amazon.com/dp/B003AIM52A';
 // B07JZQFHX6
 const { Builder } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
-const Product = require('../models/product.model.js')
+const Product = require('../models/product.model.js');
 
 let product;
+const getRank = ($) => {
+  const rankSelectorType1 = $('#SalesRank > td.value').text().replace(/\s+/g, " ").trim();
+  const rankSelectorType2 = $('#SalesRank').text().replace(/\s+/g, " ").trim();
+  const rankSelectorType3 = $('#productDetails_detailBullets_sections1 > tbody > tr:nth-child(9) > td > span').text().replace(/\s+/g, " ").trim();
+  const rankSelectorType4 = $('#productDetails_detailBullets_sections1 > tbody > tr:nth-child(3) > td > span').text().replace(/\s+/g, " ").trim();
+  
+  const rankSelectorTypes = [ rankSelectorType1, rankSelectorType2, rankSelectorType3, rankSelectorType4 ];
+  let rank;
+  for (type in rankSelectorTypes) {
+    if (rankSelectorTypes[type] && (rankSelectorTypes[type].startsWith('#') || rankSelectorTypes[type].startsWith('Amazon'))) {
+      rank = rankSelectorTypes[type];
+    }
+  }
+
+  if (rank && rank.includes('Amazon Best Sellers Rank ')) {
+      rank = rank.replace(/Amazon Best Sellers Rank/g,'');
+  }
+
+  return rank;
+}
+
+const getCategory = ($) => {
+  const categorySelector = '#wayfinding-breadcrumbs_feature_div > ul > li:nth-child(1) > span > a';
+  const category = $(categorySelector).text().replace(/\s+/g, " ").trim();
+  return category;
+}
+
+const getProductDimensions = ($) => {
+  const productDimensionsSelectorType1 =  $('#prodDetails > div.wrapper.USlocale > div.column.col1 > div > div.content.pdClearfix > div > div > table > tbody > tr:nth-child(2) > td.value').text().replace(/\s+/g, " ").trim();
+  const productDimensionsSelectorType2 = $('#detail-bullets > table > tbody > tr > td > div.content > ul > li:nth-child(1)').text().replace(/\s+/g, " ").trim();
+  const productDimensionsSelectorType3 = $('#productDetails_detailBullets_sections1 > tbody > tr:nth-child(1) > td').text().replace(/\s+/g, " ").trim();
+  const productDimensionsSelectorType4 = $('#productDetailsTable > tbody > tr > td > div.content > ul > li:nth-child(1)').text().replace(/\s+/g, " ").trim();
+
+  const productDimensionsTypes = [ productDimensionsSelectorType1, productDimensionsSelectorType2, productDimensionsSelectorType3, productDimensionsSelectorType4 ]
+  let productDimensions;
+  for (type in productDimensionsTypes) {
+    console.log('-', productDimensionsTypes[type])
+    if (productDimensionsTypes[type] && (/^\d/.test(productDimensionsTypes[type]) || productDimensionsTypes[type].startsWith('Product'))) {
+      productDimensions = productDimensionsTypes[type];
+    }
+  }
+
+  if (productDimensions && productDimensions.includes('Product Dimensions: ')) {
+    console.log('includes prod dim')
+    productDimensions = productDimensions.replace(/Product Dimensions: /g,'');
+  }
+
+  return productDimensions
+}
 
 const processHtml = (html, asin) =>{
   const $ = cheerio.load(html);
 
-  const productDimensionsSelectorType1 =  '#prodDetails > div.wrapper.USlocale > div.column.col1 > div > div.content.pdClearfix > div > div > table > tbody > tr:nth-child(2) > td.value';
-  const productDimensionsSelectorType2 = '#detail-bullets > table > tbody > tr > td > div.content > ul > li:nth-child(1)'
-  const productDimensionsSelectorType3 = '#productDetails_detailBullets_sections1 > tbody > tr:nth-child(1) > td'
-  const productDimensionsSelectorType4 = '#productDetailsTable > tbody > tr > td > div.content > ul > li:nth-child(1)'
+  // --- PRODUCT DIMENSIONS
+  const productDimensions = getProductDimensions($)
 
-  let productDimensions = $(productDimensionsSelectorType1).text().replace(/\s+/g, " ").trim() 
-    || $(productDimensionsSelectorType2).text().replace(/\s+/g, " ").trim() 
-    || $(productDimensionsSelectorType3).text().replace(/\s+/g, " ").trim()
-    || $(productDimensionsSelectorType4).text().replace(/\s+/g, " ").trim()
+  // --- RANK
+  const rank = getRank($)
 
-  if(productDimensions.includes('Product Dimensions: ')) {
-    productDimensions = productDimensions.replace(/Product Dimensions: /g,'');
-  }
-
-  const rankSelectorType1 = '#SalesRank > td.value'
-  const rankSelectorType2 = '#SalesRank'
-  const rankSelectorType3 = '#productDetails_detailBullets_sections1 > tbody > tr:nth-child(9) > td > span'
-  let rank = $(rankSelectorType1).text().replace(/\s+/g, " ").trim()
-    || $(rankSelectorType2).text().replace(/\s+/g, " ").trim()
-    || $(rankSelectorType3).text().replace(/\s+/g, " ").trim()
-
-  if(rank.includes('Amazon Best Sellers Rank: ')) {
-      rank = rank.replace(/Amazon Best Sellers Rank: /g,'');
-  }
-
-  const categorySelector = '#wayfinding-breadcrumbs_feature_div > ul > li:nth-child(1) > span > a'
-  const category = $(categorySelector).text().replace(/\s+/g, " ").trim()
+  // --- CATEGORY
+  const category = getCategory($)
 
   const productObject = {
     asin,
