@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Table } from 'semantic-ui-react'
 
 export default class ProductRow extends Component {
   constructor(props) {
@@ -15,10 +16,14 @@ export default class ProductRow extends Component {
   }
 
   render() {
+    const { product } = this.props
     return (
-      <div>
-
-      </div>
+      <Table.Row>
+        <Table.Cell>{product.asin}</Table.Cell>
+        <Table.Cell>{product.category}</Table.Cell>
+        <Table.Cell>{product.rank}</Table.Cell>
+        <Table.Cell>{product.productDimensions}</Table.Cell>
+      </Table.Row>
     )
   }
 }
