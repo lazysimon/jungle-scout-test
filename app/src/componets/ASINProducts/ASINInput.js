@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Form, Button, Container } from 'semantic-ui-react'
-import axios from 'axios'
 
 export default class ASINInput extends Component {
   constructor(props) {
@@ -8,45 +7,43 @@ export default class ASINInput extends Component {
 
 
     this.state = {
-      asin: ''
+      asin: '',
+      isLoading: false
     }
+
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
-  async componentDidMount() {
-
-  }
-
-  /**
-   * scrape data given asin and save it to db
-   */
-  scrapeAndSave() {
+  onSubmit() {
     const { asin } = this.state
-    
-    this.setState({isLoading: true})
-    axios.post('http://localhost:8080/api/product/scrape/add', 
-      {
-        asin: asin
-      })
-      .then((product) => {
-        console.log('-data', product.data)
-        this.setState({isLoading: false})
-        this.forceUpdate()
+    this.setState({ isLoading: true })
+  
+    this.props.scrapeAndSave(asin)
+      .then(() => {
+        this.setState({ isLoading: false})
       })
       .catch((error) => {
-
-      })
-
+        console.log(error)
+      });
   }
 
   render() {
-    const { isLoading } = this.state
+    const { isLoading, asin } = this.state
+    
     return (
-      <Container textAlign='left' className='asin-input-container'>
-        <Form onSubmit={() => this.scrapeAndSave()}>
-        <h4>Get Product Data by ASIN:</h4>
-        <Form.Input className='asin-input' disabled={isLoading} placeholder='ASIN' onChange={(event) => {
-          console.log(event.target.value)
-          this.setState({asin: event.target.value})}}/>
+      <Container
+        textAlign='left'
+        className='asin-input-container'
+      >
+        <Form onSubmit={() => this.onSubmit(asin)}>
+          <h4>Get Product Data by ASIN:</h4>
+          <Form.Input
+            className='asin-input' 
+            value={asin} 
+            disabled={isLoading} 
+            placeholder='ASIN' 
+            onChange={(event) => this.setState({asin: event.target.value})}
+          />
           <Button className='asin-submit-btn' type='submit' loading={isLoading}>Submit</Button>
         </Form>
       </Container>
