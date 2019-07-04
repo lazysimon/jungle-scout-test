@@ -29,11 +29,16 @@ export default class ASINProductData extends Component {
       })
   }
 
-  scrapeAndSave(asin) {
+  async scrapeAndSave(asin) {
     console.log('scrape and save', asin)
     return axios.post('http://localhost:8080/api/product/scrape/add', 
       {
         asin: asin
+      }).then((res) => {
+        this.getProductData()
+      })
+      .catch((error) => {
+        console.log(error)
       })
   }
 
