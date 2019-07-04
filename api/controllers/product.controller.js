@@ -4,7 +4,6 @@ const AmazonScraper = require('../services/amazonSraper');
 async function scrapeAndSave(req, res, next) {
   console.log('scraping...', req.body)
   const asin = req.body.asin
-  console.log(req.body.asin)
   const scrapedData = await AmazonScraper(asin) 
   console.log('scraped product', scrapedData)
   
@@ -23,7 +22,6 @@ async function getAllProducts(req, res, next) {
     if (err) {
         console.log(err);
     } else {
-        console.log(products)
         res.json(products);
     }
 });
