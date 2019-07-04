@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Container, Table } from 'semantic-ui-react'
 import axios from 'axios'
+import { Container, Table } from 'semantic-ui-react'
+import ProductRow from './ProductRow'
 
 export default class ProductTable extends Component {
   constructor(props) {
@@ -8,22 +9,33 @@ export default class ProductTable extends Component {
 
 
     this.state = {
-      isLoading: false,
       products: []
     }
   }
 
   async componentDidMount() {
+    console.log('mount product')
+    await this.getProductData()
+  }
 
+  async componentDidUpdate() {
+    // await this.getProductData()
   }
 
   async getProductData() {
-    axios.get('http://localhost:8080/api/product/scrape')
+    axios.get('http://localhost:8080/api/product/')
+      .then((products) => {
+        this.setState({products: products.data})
+      })
+      .catch((err) => {
+
+      })
     
   }
 
   render() {
-    console.log(this.props.asin)
+    const { products } = this.state
+    console.log('render product table')
     return (
       <Container className='product-table-container'>
         <Table celled padded>
@@ -37,12 +49,16 @@ export default class ProductTable extends Component {
           </Table.Header>
 
           <Table.Body>
-            <Table.Row>
-              <Table.Cell>No Name Specified</Table.Cell>
-              <Table.Cell>Unknown</Table.Cell>
-              <Table.Cell>None</Table.Cell>
-              <Table.Cell>None</Table.Cell>
-            </Table.Row>
+            {
+              products.length === 0 && <p>No data yet!</p>
+            }
+            {
+              products.map((product) => {
+                return (
+                  <ProductRow key={product.id} product={product}/>
+                )
+              })
+            }
           </Table.Body>
         </Table>
       </Container>
