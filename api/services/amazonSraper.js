@@ -8,6 +8,7 @@ const chrome = require('selenium-webdriver/chrome');
 const Product = require('../models/product.model.js');
 
 let product;
+
 const getRank = ($) => {
   const rankSelectorType1 = $('#SalesRank > td.value').text().replace(/\s+/g, " ").trim();
   const rankSelectorType2 = $('#SalesRank').text().replace(/\s+/g, " ").trim();
@@ -22,8 +23,9 @@ const getRank = ($) => {
     }
   }
 
-  if (rank && rank.includes('Amazon Best Sellers Rank: ')) {
-      rank = rank.replace(/Amazon Best Sellers Rank:/g,'');
+  if (rank && (rank.includes('Amazon Best Sellers Rank: ') || rank.includes('Amazon Best Sellers Rank' ))) {
+      rank = rank.replace(/Amazon Best Sellers Rank:/g,'')
+      rank = rank.replace(/Amazon Best Sellers Rank/g,'') ;
   }
 
   return rank;
@@ -40,24 +42,28 @@ const getProductDimensions = ($) => {
   const productDimensionsSelectorType2 = $('#detail-bullets > table > tbody > tr > td > div.content > ul > li:nth-child(1)').text().replace(/\s+/g, " ").trim();
   const productDimensionsSelectorType3 = $('#productDetails_detailBullets_sections1 > tbody > tr:nth-child(1) > td').text().replace(/\s+/g, " ").trim();
   const productDimensionsSelectorType4 = $('#productDetailsTable > tbody > tr > td > div.content > ul > li:nth-child(1)').text().replace(/\s+/g, " ").trim();
+  const productDimensionsSelectorType5 = $('#productDetails_techSpec_section_1 > tbody > tr:nth-child(2) > td').text().replace(/\s+/g, " ").trim();
 
-  const productDimensionsTypes = [ productDimensionsSelectorType1, productDimensionsSelectorType2, productDimensionsSelectorType3, productDimensionsSelectorType4 ]
+  const productDimensionsTypes = [ productDimensionsSelectorType1, productDimensionsSelectorType2, productDimensionsSelectorType3, productDimensionsSelectorType4, productDimensionsSelectorType5 ]
   let productDimensions;
   for (type in productDimensionsTypes) {
-    console.log('-', productDimensionsTypes[type])
     if (productDimensionsTypes[type] && (/^\d/.test(productDimensionsTypes[type]) || productDimensionsTypes[type].startsWith('Product'))) {
       productDimensions = productDimensionsTypes[type];
     }
   }
 
   if (productDimensions && productDimensions.includes('Product Dimensions: ')) {
-    console.log('includes prod dim')
     productDimensions = productDimensions.replace(/Product Dimensions: /g,'');
   }
 
   return productDimensions
 }
 
+/**
+ * processes html by the selectors and getting the values needed
+ * @param {*} html 
+ * @param {*} asin 
+ */
 const processHtml = (html, asin) =>{
   const $ = cheerio.load(html);
   // --- PRODUCT DIMENSIONS
@@ -78,6 +84,10 @@ const processHtml = (html, asin) =>{
   product = new Product(productObject)
 }
 
+/**
+ * main scraper function that scrapes the amazon site
+ * @param {*} asin 
+ */
 async function AmazonScraper(asin) {
   const url = 'https://www.amazon.com/dp/' + asin;
   console.log(url)
