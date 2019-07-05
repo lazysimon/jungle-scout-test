@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table, Icon, Button } from 'semantic-ui-react'
+import { Table } from 'semantic-ui-react'
 
 export default class ProductRow extends Component {
   constructor(props) {
@@ -11,6 +11,7 @@ export default class ProductRow extends Component {
     }
   }
 
+
   render() {
     const { product } = this.props
     return (
@@ -19,11 +20,6 @@ export default class ProductRow extends Component {
         <Table.Cell>{product.category}</Table.Cell>
         <Table.Cell>{product.rank}</Table.Cell>
         <Table.Cell>{product.productDimensions}</Table.Cell>
-        <Table.Cell>
-          <Button icon>
-            <Icon name='delete' />
-          </Button>
-        </Table.Cell>
       </Table.Row>
     )
   }

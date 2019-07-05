@@ -11,7 +11,6 @@ export default class ProductTable extends Component {
     this.state = {
       products: []
     }
-    // this.getProductData = this.getProductData.bind(this)
     this.renderProducts = this.renderProducts.bind(this);
     this.renderEmpty = this.renderEmpty.bind(this);
     this.renderProductsLogic = this.renderProductsLogic.bind(this);
@@ -39,7 +38,6 @@ export default class ProductTable extends Component {
             <Table.HeaderCell>Category</Table.HeaderCell>
             <Table.HeaderCell>Rank</Table.HeaderCell>
             <Table.HeaderCell>Product Dimensions</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
@@ -47,7 +45,10 @@ export default class ProductTable extends Component {
           {
             products.map((product) => {
               return (
-                <ProductRow key={product.id} product={product}/>
+                <ProductRow
+                  key={product.id}
+                  product={product}
+                />
               )
             })
           }
@@ -66,7 +67,6 @@ export default class ProductTable extends Component {
 
 
   render() {
-    console.log('render product table')
     return (
       <Container className='product-table-container'>
         {this.renderProductsLogic()}
