@@ -46,17 +46,18 @@ export default class ASINProductData extends Component {
       })
   }
 
-
   render() {
     const { products, errorMessage } = this.state
-    console.log(errorMessage)
     return (
       <div>
         <ASINInput scrapeAndSave={(asin) => this.scrapeAndSave(asin)}/>
         {
           errorMessage && <ErrorMessage message={errorMessage}/>
         }
-        <ProductTable products={products}/>
+        <ProductTable
+          products={products}
+          deleteProduct={(id) => this.deleteProduct(id)}
+        />
       </div>
     )
   }

@@ -1,11 +1,17 @@
 const Product = require('../models/product.model');
 const AmazonScraper = require('../services/amazonSraper');
 
+/**
+ * scrape and save data 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 async function scrapeAndSave(req, res, next) {
   const asin = req.body.asin
   try {
     const data = await AmazonScraper(asin) 
-    console.log(data)
+
     if(!data.category) {
       throw new Error('error here');
     } else {
@@ -24,6 +30,12 @@ async function scrapeAndSave(req, res, next) {
   }
 }
 
+/**
+ * fetches all products and returns them
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 async function getAllProducts(req, res, next) {
   Product.find(function(err, products) {
     if (err) {
@@ -34,6 +46,11 @@ async function getAllProducts(req, res, next) {
 });
 }
 
+/**
+ * adds product to db
+ * @param {*} req 
+ * @param {*} res 
+ */
 async function addProduct(req, res) {
   let product = new Product(req.body);
   product.save()
