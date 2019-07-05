@@ -60,12 +60,6 @@ const getProductDimensions = ($) => {
 
 const processHtml = (html, asin) =>{
   const $ = cheerio.load(html);
-
-  // check if page exists:
-  const pageNotFound = $('#g > div > a > img').attr("alt");
-  if (pageNotFound) {
-    throw new Error('page not found')
-  }
   // --- PRODUCT DIMENSIONS
   const productDimensions = getProductDimensions($)
 
@@ -97,10 +91,20 @@ async function AmazonScraper(asin) {
     await driver.get(url);
     await driver.getPageSource()
       .then((html) => {
+        const $ = cheerio.load(html);
+
+        // check if page exists:
+        const pageNotFound = $('#g > div > a > img').attr('alt') || $('#h > div > a > img').attr('alt')
+        
+        if (pageNotFound) {
+          driver.quit()
+          throw new Error('page not found')
+        }
+
         processHtml(html, asin)
         driver.quit()
       }).catch((error) =>  {
-        console.log(error)
+        console.log('error', error)
       })
 
   return product

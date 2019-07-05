@@ -3,9 +3,13 @@ const AmazonScraper = require('../services/amazonSraper');
 
 async function scrapeAndSave(req, res, next) {
   const asin = req.body.asin
-  const scrapedData = await AmazonScraper(asin) 
-    .then((data) => {
-      let product = new Product(scrapedData);
+  try {
+    const data = await AmazonScraper(asin) 
+    console.log(data)
+    if(!data.category) {
+      throw new Error('error here');
+    } else {
+      let product = new Product(data);
       product.save()
         .then((product) => {
           res.status(200).json({'product': 'product successfully added'})
@@ -13,12 +17,11 @@ async function scrapeAndSave(req, res, next) {
         .catch((err) => {
           res.status(400).send('unable to save to database')
         })
-    })
-    .catch((error) => {
-      // res.status(400).send('page not found')
-      res.status(400).json({error: 'page not found'})
-      
-    })
+    }
+  } catch(error) {
+    console.log('SCRAPE ERROR')
+    res.status(400).send('error scraping!')
+  }
 }
 
 async function getAllProducts(req, res, next) {
@@ -34,8 +37,8 @@ async function getAllProducts(req, res, next) {
 async function addProduct(req, res) {
   let product = new Product(req.body);
   product.save()
-    .then((business) => {
-      res.status(200).json({'product': 'product successfully added'})
+    .then((data) => {
+      res.status(200).json({'product': 'product successfully added', product})
     })
     .catch((err) => {
       res.status(400).send("unable to save to database")

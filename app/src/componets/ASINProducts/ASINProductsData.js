@@ -34,6 +34,7 @@ export default class ASINProductData extends Component {
   }
 
   async scrapeAndSave(asin) {
+    this.setState({ errorMessage: '' })
     return axios.post('http://localhost:8080/api/product/scrape/add', 
       {
         asin: asin
