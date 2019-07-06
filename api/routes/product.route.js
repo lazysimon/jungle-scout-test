@@ -7,7 +7,6 @@ app.use(bodyParser.json());
 
 router.post('/product/add', (req, res) => {
   productController.addProduct(req, res)
-  res.send(res.body)
 })
 
 router.get('/product/scrape/', (req, res) => {
