@@ -58,5 +58,5 @@ To scale this application, I know I cannot use `selenium-webdriver` because it r
 I chose the MERN stack because it's the stack i am the most familiar with. In the future, if scraping would have to be always done, i think Python would be the better choice. I chose to use `selenium-webdriver` versus `puppeteer` because selenium is widely used in other languages, not just in node. They both do the same thing. I tried using puppeteer but it wasn't giving me a faster result. I chose Cheerio because it was a well known library for scraping in Node. For tests I used mocha, chai, and supertest. 
 
 ## Comments
-I would love some feedback! I know what I did is not the "best" or the "correct" way to do things. I would love to know what is the best practices for some of these things. I love constructive criticism! 
+I would love some feedback! I know what I did is not the "best" or the "correct" way to do things. I know this is not perfect. There can be many things that can be improved. I would love to know what is the best practices for some of these things. I love constructive criticism! 
 
