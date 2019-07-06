@@ -18,7 +18,7 @@ async function scrapeAndSave(req, res, next) {
       let product = new Product(data);
       product.save()
         .then((product) => {
-          res.status(200).json({'product': 'product successfully added'})
+          res.status(200).json({ 'product': product })
         })
         .catch((err) => {
           res.status(400).send('unable to save to database')
@@ -55,7 +55,7 @@ async function addProduct(req, res) {
   let product = new Product(req.body);
   product.save()
     .then((data) => {
-      res.status(200).json({'product': 'product successfully added', product})
+      res.status(200).json({ 'product': data })
     })
     .catch((err) => {
       res.status(400).send("unable to save to database")

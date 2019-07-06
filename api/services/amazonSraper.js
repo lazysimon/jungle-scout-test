@@ -90,7 +90,6 @@ const processHtml = (html, asin) =>{
  */
 async function AmazonScraper(asin) {
   const url = 'https://www.amazon.com/dp/' + asin;
-  console.log(url)
 
   const driver = new Builder().forBrowser('chrome')
       .setChromeOptions(new chrome.Options()
