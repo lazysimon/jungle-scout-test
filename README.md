@@ -42,6 +42,8 @@ __Note:__ You may need to download ChromeDriver that matches your Chrome version
 - The scraper is only tested for amazon.com, not .ca or any other regions. 
 - I have considered if the user has entered a ASIN that does not exist
 
+__P.S__ I know the API call is slow.... I'm so sorry....
+
 ## What were the biggest challenges you faced in writing the challenge?
 
 There were many challenges! The biggest challenges I faced when writing this application was scraping the data from Amazon's site. I’ve never done any data scraping but I’ve always wanted to! I realized I can’t just use Cheerio to scrape amazon data because amazon is too smart! It blocks me and tells me to use their API instead. 
