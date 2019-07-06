@@ -38,6 +38,7 @@ __Note:__ You may need to download ChromeDriver that matches your Chrome version
 
 ![](https://paper-attachments.dropbox.com/s_FE3CE9E74DAEF32A9C0A9D2F16E4532C410853ABF3AD1FDA853C8456D433F590_1562360454506_Screen+Shot+2019-07-03+at+4.52.19+PM.png)
 
+- I wasn't sure what type of category you wanted so I just scraped the highest level category
 - The scraper is only tested for amazon.com, not .ca or any other regions. 
 - I have considered if the user has entered a ASIN that does not exist
 
